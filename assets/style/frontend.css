@@ -1,0 +1,56 @@
+.yrwp-icon {
+  line-height: 0;
+  display: inline-block;
+}
+
+.yrwp-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.yrwp-forecast {
+  display: grid;
+  gap: 10px;
+}
+
+.yrwp-7-days {
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.yrwp-9-days {
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.yrwp-day {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.yrwp-hourly {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+}
+
+.yrwp-hour {
+  text-align: center;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.yrwp-hour-time {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.yrwp-json-output {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}

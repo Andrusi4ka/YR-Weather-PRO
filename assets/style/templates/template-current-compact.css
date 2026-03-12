@@ -1,0 +1,23 @@
+.yrwp-template-current-compact .main-compact {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.yrwp-template-current-compact .yrwp-custom-text-short span {
+    backdrop-filter: blur(0.7px);
+    font-size: 20px;
+    padding: 7px 17px;
+    border-radius: 30px;
+    background-color: #c1bfbf91;
+    display: inline;
+}
+
+.yrwp-template-current-compact .yrwp-fields {
+    margin: 0;
+}
+
+.yrwp-template-current-compact .yrwp-field__value {
+    font-size: 64px;
+    margin: 0;
+}

@@ -1,0 +1,44 @@
+.yrwp-template-current-default .yrwp-current-full__symbols {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.yrwp-template-current-default .yrwp-current-full__temperature {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.yrwp-template-current-default .yrwp-current-full__temperature-value {
+  font-size: 64px;
+  line-height: 1;
+}
+
+.yrwp-template-current-default .yrwp-fields--instant .yrwp-field {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.yrwp-template-current-default .yrwp-field__label--icon {
+  margin: 0;
+  line-height: 0;
+  flex: 0 0 28px;
+}
+
+.yrwp-template-current-default .yrwp-field__icon {
+  width: 28px;
+  height: 28px;
+  display: block;
+}
+
+.yrwp-template-current-default .yrwp-field__value {
+  margin: 0;
+}
+
+.yrwp-template-current-default .yrwp-fields {
+  display: flex;
+  gap: 20px;
+}

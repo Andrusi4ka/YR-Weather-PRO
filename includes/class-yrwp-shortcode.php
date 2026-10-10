@@ -101,10 +101,6 @@ class Shortcode
 
     public static function render($atts)
     {
-        if (!Admin::has_valid_access_key()) {
-            return '';
-        }
-
         $atts = shortcode_atts(['id' => 0], $atts);
         $id = intval($atts['id']);
         if (!$id) return '';
@@ -150,7 +146,7 @@ class Shortcode
         if ($mode === 'visitor_geo') {
             $out .= '<div class="yrwp-body yrwp-loading">' . esc_html(I18N::t('loading_weather')) . '</div>';
             if (!$is_raw_template) {
-                $out .= self::met_credit() . '</div>';
+                $out .= self::met_credit($meta) . '</div>';
             }
             return $out;
         }
@@ -202,18 +198,23 @@ class Shortcode
 
         $out .= self::render_from_api($meta, $res['data'], $res['updated_at'] ?? null);
         if (!$is_raw_template) {
-            $out .= self::met_credit() . '</div>';
+            $out .= self::met_credit($meta) . '</div>';
         }
 
         return $out;
     }
 
     /**
-     * Credit line MET Norway's licence (CC BY 4.0) asks for. Manual and JSON
+     * Credit line MET Norway's licence (CC BY 4.0) asks for, unless the widget
+     * switches it off (e.g. the site credits MET elsewhere). Manual and JSON
      * templates leave it to whoever writes them.
      */
-    private static function met_credit(): string
+    private static function met_credit(array $meta): string
     {
+        if (isset($meta['show_credit']) && empty($meta['show_credit'])) {
+            return '';
+        }
+
         return '<p class="yrwp-credit"><a href="https://www.met.no/" target="_blank" rel="noopener noreferrer">' . esc_html(I18N::t('met_credit')) . '</a></p>';
     }
 

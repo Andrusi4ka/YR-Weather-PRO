@@ -122,16 +122,12 @@ class Icons
     {
         if ($type === 'details') {
             return [
-                'title' => 'Detail Icons',
                 'subtitle' => 'Detail icons (Built-in + Custom override)',
-                'description' => 'Upload a custom SVG with the same file name to override the built-in detail icon.',
             ];
         }
 
         return [
-            'title' => 'Weather Icons',
             'subtitle' => 'Weather icons (Built-in + Custom override)',
-            'description' => 'Upload a custom SVG with the same file name to override the built-in weather icon.',
         ];
     }
 
@@ -171,11 +167,6 @@ class Icons
         echo '</nav>';
 
         echo '<h2>' . esc_html($labels['subtitle']) . '</h2>';
-        echo '<div class="notice notice-info" style="margin:15px 0;">';
-        echo '<p><strong>How custom icons work:</strong></p>';
-        echo '<p>' . esc_html($labels['description']) . '</p>';
-        echo '<p>Custom SVG icons are stored in uploads and override the built-in icon at runtime without modifying plugin files.</p>';
-        echo '</div>';
 
         $builtin = self::list_builtin_svgs($type);
         if (!$builtin) {
@@ -193,9 +184,7 @@ class Icons
         echo '<thead><tr>';
         echo '<th style="width:180px;">Built-in</th>';
         echo '<th style="width:220px;">Name</th>';
-        if ($type === 'details') {
-            echo '<th style="width:280px;">Placeholder</th>';
-        }
+        echo '<th style="width:280px;">Placeholder</th>';
         echo '<th style="width:180px;">Custom</th>';
         echo '<th style="width:320px;">Action</th>';
         echo '</tr></thead><tbody>';
@@ -216,10 +205,10 @@ class Icons
 
             echo '<td style="vertical-align:middle;"><code>' . esc_html($name) . '</code></td>';
 
-            if ($type === 'details') {
-                $token_text = $detail_tokens[$name] ?? '—';
-                echo '<td style="vertical-align:middle;"><code>' . esc_html($token_text) . '</code></td>';
-            }
+            // A weather icon goes into manual templates through one token; the
+            // forecast picks which icon it shows.
+            $token_text = $type === 'details' ? ($detail_tokens[$name] ?? '—') : '{{ weather_icon }}';
+            echo '<td style="vertical-align:middle;"><code>' . esc_html($token_text) . '</code></td>';
 
             echo '<td style="vertical-align:middle;">';
             if ($custom_exists) {

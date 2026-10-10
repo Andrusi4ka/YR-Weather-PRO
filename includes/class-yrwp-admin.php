@@ -5,7 +5,6 @@ if (!defined('ABSPATH')) exit;
 
 class Admin {
     const OPT_KEY = 'yrwp_options';
-    private const ACCESS_KEY_LENGTH = 32;
 
     public static function init() {
         add_action('admin_menu', [__CLASS__, 'menu']);
@@ -51,43 +50,14 @@ class Admin {
         ]);
 
         add_settings_section('yrwp_sec_general', I18N::t('settings'), '__return_false', 'yrwp_general');
-        add_settings_field('language', I18N::t('language'), [__CLASS__, 'field_language'], 'yrwp_general', 'yrwp_sec_general');
         add_settings_field('user_agent_email', I18N::t('contact_email'), [__CLASS__, 'field_email'], 'yrwp_general', 'yrwp_sec_general');
-        add_settings_field('access_key', I18N::t('access_key'), [__CLASS__, 'field_access_key'], 'yrwp_general', 'yrwp_sec_general');
     }
 
     public static function sanitize_options($opts) {
+        $opts = is_array($opts) ? $opts : [];
         $out = [];
-        $out['language'] = I18N::sanitize_language($opts['language'] ?? 'en');
         $out['user_agent_email'] = sanitize_email($opts['user_agent_email'] ?? '');
-        $out['access_key'] = self::sanitize_access_key($opts['access_key'] ?? '');
         return $out;
-    }
-
-    public static function sanitize_access_key($value): string {
-        $value = preg_replace('/\s+/', '', sanitize_text_field((string) $value));
-        return strlen($value) === self::ACCESS_KEY_LENGTH ? $value : '';
-    }
-
-    public static function get_access_key(): string {
-        $opts = get_option(self::OPT_KEY, []);
-        return self::sanitize_access_key($opts['access_key'] ?? '');
-    }
-
-    public static function has_valid_access_key(): bool {
-        return self::get_access_key() !== '';
-    }
-
-    public static function field_language() {
-        $opts = get_option(self::OPT_KEY, []);
-        $selected = I18N::sanitize_language($opts['language'] ?? 'en');
-        $languages = I18N::get_supported_languages();
-
-        echo '<select name="' . esc_attr(self::OPT_KEY) . '[language]">';
-        foreach ($languages as $key => $label) {
-            echo '<option value="' . esc_attr($key) . '" ' . selected($selected, $key, false) . '>' . esc_html($label) . '</option>';
-        }
-        echo '</select>';
     }
 
     public static function field_email() {
@@ -98,20 +68,6 @@ class Admin {
             echo '<p class="description">' . wp_kses_post(str_replace('{email}', '<strong>' . esc_html($email) . '</strong>', I18N::t('saved_email'))) . '</p>';
         } else {
             echo '<p class="description">' . esc_html(I18N::t('user_agent_help')) . '</p>';
-        }
-    }
-
-    public static function field_access_key() {
-        $key = self::get_access_key();
-        $is_locked = $key !== '';
-        if ($is_locked) {
-            echo '<input type="hidden" name="' . esc_attr(self::OPT_KEY) . '[access_key]" value="' . esc_attr($key) . '">';
-        }
-        echo '<input type="text" class="regular-text" value="' . esc_attr($key) . '" maxlength="' . esc_attr((string) self::ACCESS_KEY_LENGTH) . '" placeholder="1234567890abcdef1234567890abcdef"' . ($is_locked ? ' disabled="disabled" readonly="readonly"' : ' name="' . esc_attr(self::OPT_KEY) . '[access_key]"') . '>';
-        if ($key !== '') {
-            echo '<p class="description">' . esc_html(I18N::t('access_key_saved')) . '</p>';
-        } else {
-            echo '<p class="description">' . esc_html(I18N::t('access_key_help')) . '</p>';
         }
     }
 
@@ -223,9 +179,6 @@ class Admin {
         check_ajax_referer('yrwp_admin', 'nonce');
         if (!current_user_can('manage_options')) {
             wp_send_json_error(['message' => 'Forbidden'], 403);
-        }
-        if (!self::has_valid_access_key()) {
-            wp_send_json_error(['message' => I18N::t('access_key_required')], 403);
         }
 
         $q = sanitize_text_field($_GET['q'] ?? '');

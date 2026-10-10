@@ -47,7 +47,7 @@ What it does:
 ### 2.2. City Search and Reverse Timezone Detection
 
 - City search: `https://geocoding-api.open-meteo.com/v1/search`
-- Reverse geocoding: `https://geocoding-api.open-meteo.com/v1/reverse`
+- Time zone for coordinates: `https://api.open-meteo.com/v1/forecast?timezone=auto`
 - Implementation:
   - `Admin::ajax_city_search()` in `includes/class-yrwp-admin.php`
   - `MET::fetch_timezone_for_coordinates()` in `includes/class-yrwp-met.php`
@@ -89,14 +89,13 @@ The plugin stores data in two places:
 
 Stored in `yrwp_options`:
 
-- `language`
 - `user_agent_email`
-- `access_key`
 
 Stored in `_yrwp` for each weather widget:
 
 - `enabled`
 - `title_show`
+- `show_credit`
 - `location_mode`
 - `lat`, `lon`
 - `city_name`, `city_lat`, `city_lon`, `city_timezone`
@@ -113,35 +112,7 @@ Stored in `_yrwp` for each weather widget:
 - `manual_show_today_7`
 - `manual_show_today_9`
 
-### 4.2. Primitive Activation via Access Key
-
-In the current implementation, the plugin requires entering **any 32-character string** in the global settings.
-
-What this means:
-
-- if `access_key` is empty or not exactly 32 characters long, the plugin is considered inactive;
-- if a key has been entered, the field becomes locked in the admin panel;
-- the plugin is not a license system with server-side validation;
-- this is a local mandatory condition for enabling functionality.
-
-Where this is checked:
-
-- `Admin::has_valid_access_key()`
-- `Shortcode::render()`
-- `Rest::get_weather()`
-- `Rest::get_weather_data()`
-- `MET::fetch_compact()`
-- `MET::fetch_timezone_for_coordinates()`
-- `Admin::ajax_city_search()`
-
-Result:
-
-- without the key, weather rendering does not work;
-- without the key, geocoding does not work;
-- without the key, REST returns an error;
-- without the key, the shortcode outputs nothing.
-
-### 4.3. Weather Widget Lifecycle
+### 4.2. Weather Widget Lifecycle
 
 1. The administrator creates a post of type `yrwp_widget`.
 2. In the metabox, they configure the period, template, coordinates, cache, manual templates, and so on.
@@ -157,7 +128,7 @@ Result:
    - the data is passed to the template loader.
 6. On the frontend, HTML is returned directly into the page or, for visitor geolocation, loaded via REST.
 
-### 4.4. Caching
+### 4.3. Caching
 
 The plugin actively uses **WordPress Transients**.
 
@@ -173,7 +144,7 @@ Characteristics:
 - timezone data is cached for `WEEK_IN_SECONDS * 4`;
 - when a widget is saved, `delete_transient('yrwp_cache_' . $post_id)` is called, but the main runtime cache includes an additional coordinate hash, so the cleanup is partial rather than complete.
 
-### 4.5. Visitor Geolocation
+### 4.4. Visitor Geolocation
 
 If `visitor_geo` is selected for the widget:
 
@@ -183,9 +154,9 @@ If `visitor_geo` is selected for the widget:
 - a ready-made widget HTML response is returned;
 - the HTML is inserted into the DOM.
 
-### 4.6. Localization
+### 4.5. Localization
 
-The plugin supports three languages:
+The plugin's texts follow the WordPress language (the user's language in the admin, the site language on the site) and exist in three languages; any other language gets English:
 
 - English (`en`)
 - Norsk Bokmal (`nb`)
@@ -334,7 +305,7 @@ Capabilities:
 - use built-in SVGs;
 - override them with custom SVGs from uploads;
 - replace icons without editing plugin files;
-- a separate icon administration page;
+- a separate icon administration page: upload an SVG with any file name in the row of the icon it replaces (it is saved under that icon's name);
 - safe SVG sanitization before saving.
 
 ### 5.9. City Autocomplete
@@ -468,16 +439,11 @@ Purpose:
 
 Fields:
 
-- `Language`
 - `Contact email for User-Agent`
-- `Access key`
 
 Logic:
 
-- language affects plugin texts;
 - email is added to the User-Agent for the MET API;
-- access key is required for the plugin to work;
-- after entering a valid key, the field becomes locked.
 
 ![screen](./screens/screen-1.png)
 
@@ -683,7 +649,6 @@ yr-weather-pro-8.3/
 
 - registration of the Settings and Info menus;
 - global settings;
-- access key logic;
 - AJAX geocoding city search;
 - admin asset enqueueing.
 

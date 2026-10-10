@@ -180,6 +180,8 @@ class CPT
 
         $enabled = !empty($meta['enabled']) ? 1 : 0;
         $title_show = !empty($meta['title_show']) ? 1 : 0;
+        // On unless switched off (widgets saved before the setting existed show it).
+        $show_credit = !isset($meta['show_credit']) || !empty($meta['show_credit']) ? 1 : 0;
 
         $location_mode = $meta['location_mode'] ?? 'manual_coords';
         $lat = $meta['lat'] ?? '';
@@ -283,6 +285,11 @@ class CPT
 
         echo '<tr class="yrwp-only-non-manual"><th scope="row">' . esc_html(I18N::t('show_title')) . '</th><td>
             <label><input type="checkbox" name="yrwp[title_show]" value="1" ' . checked(1, $title_show, false) . '> ' . esc_html(I18N::t('show_title')) . '</label>
+        </td></tr>';
+
+        echo '<tr class="yrwp-only-standard"><th scope="row">' . esc_html(I18N::t('data_credit')) . '</th><td>
+            <label><input type="checkbox" name="yrwp[show_credit]" value="1" ' . checked(1, $show_credit, false) . '> ' . esc_html(I18N::t('show_credit')) . '</label>
+            <p class="description">' . esc_html(I18N::t('show_credit_help')) . '</p>
         </td></tr>';
 
         echo '<tr class="yrwp-only-non-manual"><th scope="row">' . esc_html(I18N::t('custom_css_class')) . '</th><td>
@@ -424,6 +431,11 @@ class CPT
                     el.style.display = isJson ? "none" : "";
                 });
 
+                // Default and compact templates only (manual and JSON have no credit line).
+                document.querySelectorAll(".yrwp-only-standard").forEach(function(el){
+                    el.style.display = (isManual || isJson) ? "none" : "";
+                });
+
                 document.querySelectorAll(".yrwp-only-current-manual").forEach(function(el){
                     el.style.display = (period === "current" && value === "current-manual") ? "" : "none";
                 });
@@ -470,6 +482,7 @@ class CPT
 
         $meta['enabled'] = !empty($in['enabled']) ? 1 : 0;
         $meta['title_show'] = !empty($in['title_show']) ? 1 : 0;
+        $meta['show_credit'] = !empty($in['show_credit']) ? 1 : 0;
         $meta['location_mode'] = in_array(($in['location_mode'] ?? ''), ['manual_coords', 'city', 'visitor_geo'], true)
             ? $in['location_mode']
             : 'manual_coords';

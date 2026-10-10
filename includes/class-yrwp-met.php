@@ -14,10 +14,6 @@ class MET {
     }
 
     public static function fetch_compact(float $lat, float $lon) : array {
-        if (!Admin::has_valid_access_key()) {
-            return ['ok' => false, 'error' => I18N::t('access_key_required')];
-        }
-
         // MET asks for at most 4 decimals (it ignores the rest).
         $url = add_query_arg([
             'lat' => round($lat, 4),
@@ -75,16 +71,13 @@ class MET {
     }
 
     private static function fetch_timezone_for_coordinates(float $lat, float $lon): string {
-        if (!Admin::has_valid_access_key()) {
-            return '';
-        }
-
+        // Open-Meteo has no reverse geocoding (that URL answered 404); its
+        // forecast API with timezone=auto and no variables returns just the zone.
         $url = add_query_arg([
-            'latitude' => $lat,
-            'longitude' => $lon,
-            'language' => 'en',
-            'format' => 'json',
-        ], 'https://geocoding-api.open-meteo.com/v1/reverse');
+            'latitude' => round($lat, 4),
+            'longitude' => round($lon, 4),
+            'timezone' => 'auto',
+        ], 'https://api.open-meteo.com/v1/forecast');
 
         $resp = wp_remote_get($url, [
             'timeout' => 10,
@@ -104,12 +97,7 @@ class MET {
             return '';
         }
 
-        $results = $data['results'] ?? [];
-        if (!is_array($results) || !$results) {
-            return '';
-        }
-
-        return self::normalize_timezone($results[0]['timezone'] ?? '');
+        return self::normalize_timezone($data['timezone'] ?? '');
     }
 
     public static function get_cached_for_widget(int $widget_id, float $lat, float $lon, int $ttl) : array {

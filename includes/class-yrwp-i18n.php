@@ -8,25 +8,24 @@ class I18N
 {
     private const DEFAULT_LANGUAGE = 'en';
 
-    public static function get_supported_languages(): array
-    {
-        return [
-            'en' => 'English',
-            'nb' => 'Norsk Bokmal',
-            'uk' => 'Українська',
-        ];
-    }
-
-    public static function sanitize_language(?string $language): string
-    {
-        $language = sanitize_key((string) $language);
-        return array_key_exists($language, self::get_supported_languages()) ? $language : self::DEFAULT_LANGUAGE;
-    }
-
+    /**
+     * Language of the plugin's texts, from WordPress: the user's admin
+     * language in the admin, the site language on the site. Ukrainian and
+     * Norwegian have their own texts, every other locale gets English.
+     */
     public static function get_language(): string
     {
-        $options = get_option(Admin::OPT_KEY, []);
-        return self::sanitize_language($options['language'] ?? self::DEFAULT_LANGUAGE);
+        $locale = strtolower((string) determine_locale());
+
+        if (strpos($locale, 'uk') === 0) {
+            return 'uk';
+        }
+
+        if (in_array(substr($locale, 0, 2), ['nb', 'nn', 'no'], true)) {
+            return 'nb';
+        }
+
+        return self::DEFAULT_LANGUAGE;
     }
 
     public static function info_content(): array
@@ -214,12 +213,7 @@ class I18N
         return [
             'en' => [
                 'settings' => 'Settings',
-                'language' => 'Language',
                 'contact_email' => 'Contact email for User-Agent',
-                'access_key' => 'Access key',
-                'access_key_help' => 'Enter any 32-character key. Without it, the plugin is disabled.',
-                'access_key_saved' => 'Access key saved. The plugin is enabled.',
-                'access_key_required' => 'Access key required. Enter a 32-character key in plugin settings.',
                 'saved_email' => 'Saved: {email} (you can replace it anytime)',
                 'user_agent_help' => 'Required by MET Norway Terms: identify yourself in User-Agent.',
                 'save' => 'Save',
@@ -266,6 +260,9 @@ class I18N
                 'update_frequency' => 'Update frequency',
                 'clock_format' => 'Clock format',
                 'show_title' => 'Show title',
+                'data_credit' => 'Data credit',
+                'show_credit' => 'Show "Weather data: MET Norway" under the widget',
+                'show_credit_help' => 'MET Norway shares its data under CC BY 4.0, which asks for a credit. Switch it off only if the site credits MET Norway elsewhere.',
                 'custom_css_class' => 'Custom CSS class',
                 'custom_css' => 'Custom CSS',
                 'manual_template' => 'Manual template',
@@ -292,12 +289,7 @@ class I18N
             ],
             'nb' => [
                 'settings' => 'Innstillinger',
-                'language' => 'Sprak',
                 'contact_email' => 'Kontakt e-post for User-Agent',
-                'access_key' => 'Tilgangsnokkel',
-                'access_key_help' => 'Skriv inn en valgfri nokkel pa 32 tegn. Uten den er pluginen deaktivert.',
-                'access_key_saved' => 'Tilgangsnokkel lagret. Pluginen er aktiv.',
-                'access_key_required' => 'Tilgangsnokkel kreves. Legg inn en nokkel pa 32 tegn i plugininnstillingene.',
                 'saved_email' => 'Lagret: {email} (du kan endre den nar som helst)',
                 'user_agent_help' => 'Kreves av vilkarene til MET Norway: identifiser deg i User-Agent.',
                 'save' => 'Lagre',
@@ -344,6 +336,9 @@ class I18N
                 'update_frequency' => 'Oppdateringsfrekvens',
                 'clock_format' => 'Tidsformat',
                 'show_title' => 'Vis tittel',
+                'data_credit' => 'Kildehenvisning',
+                'show_credit' => 'Vis «Værdata: Meteorologisk institutt» under widgeten',
+                'show_credit_help' => 'Meteorologisk institutt deler dataene under CC BY 4.0, som krever kildehenvisning. Slå den av bare hvis nettstedet oppgir kilden et annet sted.',
                 'custom_css_class' => 'Tilpasset CSS-klasse',
                 'custom_css' => 'Tilpasset CSS',
                 'manual_template' => 'Manuell mal',
@@ -370,12 +365,7 @@ class I18N
             ],
             'uk' => [
                 'settings' => 'Настройки',
-                'language' => 'Мова',
                 'contact_email' => 'Контактний email для User-Agent',
-                'access_key' => 'Ключ доступу',
-                'access_key_help' => 'Введіть будь-який ключ із 32 символів. Без нього плагін не працюватиме.',
-                'access_key_saved' => 'Ключ доступу збережено. Плагін активний.',
-                'access_key_required' => 'Потрібен ключ доступу. Введіть у налаштуваннях ключ із 32 символів.',
                 'saved_email' => 'Збережено: {email} (можна змінити будь-коли)',
                 'user_agent_help' => 'Вимагається правилами MET Norway: вкажіть себе в User-Agent.',
                 'save' => 'Зберегти',
@@ -422,6 +412,9 @@ class I18N
                 'update_frequency' => 'Частота оновлення',
                 'clock_format' => 'Формат часу',
                 'show_title' => 'Показувати заголовок',
+                'data_credit' => 'Джерело даних',
+                'show_credit' => 'Показувати «Дані про погоду: MET Norway» під віджетом',
+                'show_credit_help' => 'MET Norway поширює дані за ліцензією CC BY 4.0, яка вимагає вказувати джерело. Вимикайте, лише якщо сайт вказує MET Norway в іншому місці.',
                 'custom_css_class' => 'Власний CSS клас',
                 'custom_css' => 'Власний CSS',
                 'manual_template' => 'Ручний шаблон',

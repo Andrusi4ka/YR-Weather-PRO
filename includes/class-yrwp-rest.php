@@ -77,13 +77,6 @@ class Rest
 
     public static function get_weather(\WP_REST_Request $req)
     {
-        if (!Admin::has_valid_access_key()) {
-            return new \WP_REST_Response([
-                'ok'    => false,
-                'error' => I18N::t('access_key_required')
-            ], 403);
-        }
-
         $id = intval($req->get_param('id'));
         $context = self::resolve_widget_context($id);
         if ($context instanceof \WP_REST_Response) {
@@ -120,13 +113,6 @@ class Rest
 
     public static function get_weather_data(\WP_REST_Request $req)
     {
-        if (!Admin::has_valid_access_key()) {
-            return new \WP_REST_Response([
-                'ok'    => false,
-                'error' => I18N::t('access_key_required')
-            ], 403);
-        }
-
         $id = intval($req->get_param('id'));
         $context = self::resolve_widget_context($id);
 

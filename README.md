@@ -1,5 +1,14 @@
 # YR Weather Pro
 
+## Installation And Updates
+
+1. Download `yr-weather-pro.zip` from the latest [release](https://github.com/Andrusi4ka/YR-Weather-PRO/releases).
+2. In WordPress go to `Plugins -> Add New -> Upload Plugin`, upload the zip and activate it.
+
+Newer versions then appear under `Plugins` like any other update. Widgets and settings are stored in the database and are kept across updates.
+
+To publish a version: raise `Version` and `YRWP_VERSION` in `yr-weather-pro.php`, `Stable tag` and the changelog in `readme.txt`, commit, then push a tag `vX.Y.Z`. The release workflow builds `yr-weather-pro.zip` and attaches it to the release.
+
 ## 1. What This Plugin Is and What It Is For
 
 **YR Weather Pro** is a WordPress plugin for building weather widgets based on data from **MET Norway / yr.no**. The plugin allows an administrator to create multiple separate weather blocks and configure, for each one, the coordinate source, forecast period, display template, field set, styles, and output method on the site.
@@ -411,8 +420,7 @@ Route:
 Parameters:
 
 - `id` - required widget ID
-- `lat` - required latitude
-- `lon` - required longitude
+- `lat`, `lon` - the visitor's coordinates; used only by a widget in visitor geolocation mode, rounded to 2 decimals (about 1 km). Other widgets always use their saved location.
 
 Returns:
 
@@ -434,7 +442,7 @@ Parameters:
 
 - `id` - required
 - `period` - optional
-- `lat`, `lon` - optional
+- `lat`, `lon` - optional; as for `/weather`, used only by a visitor geolocation widget
 
 Returns:
 
@@ -471,7 +479,7 @@ Logic:
 - access key is required for the plugin to work;
 - after entering a valid key, the field becomes locked.
 
-![screen](./assets/screen-1.png)
+![screen](./screens/screen-1.png)
 
 ### 8.2. Weather Widgets (CPT List)
 
@@ -488,7 +496,7 @@ Available from here:
 - creating a new widget;
 - shortcode in the list column.
 
-![screen](./assets/screen-2.png)
+![screen](./screens/screen-2.png)
 
 ### 8.3. Widget Edit Screen
 
@@ -531,7 +539,7 @@ For example:
 - city fields are shown only for `city`;
 - lat/lon fields are shown only for `manual_coords`.
 
-![screen](./assets/screen-3.gif)
+![screen](./screens/screen-3.gif)
 
 ### 8.4. Icons
 
@@ -559,9 +567,9 @@ Characteristics:
 - detail icons show the corresponding placeholder token;
 - SVGs are sanitized before saving.
 
-![screen](./assets/screen-4.png)
+![screen](./screens/screen-4.png)
 
-![screen](./assets/screen-5.png)
+![screen](./screens/screen-5.png)
 
 ### 8.5. Info
 
@@ -579,7 +587,7 @@ The page content is built from:
 
 - `I18N::info_content()`
 
-![screen](./assets/screen-6.png)
+![screen](./screens/screen-6.png)
 
 ## 9. Plugin Structure
 

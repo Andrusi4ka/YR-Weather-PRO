@@ -471,7 +471,7 @@ Slug:
 - access key обов’язковий для роботи плагіну;
 - після введення валідного ключа поле блокується.
 
-![screen](./assets/screen-1.png)
+![screen](./screens/screen-1.png)
 
 ### 8.2. Weather Widgets (CPT list)
 
@@ -488,7 +488,7 @@ Slug:
 - створення нового віджета;
 - shortcode в колонці списку.
 
-![screen](./assets/screen-2.png)
+![screen](./screens/screen-2.png)
 
 ### 8.3. Екран редагування віджета
 
@@ -531,7 +531,7 @@ Slug:
 - city fields показуються лише для `city`;
 - lat/lon поля показуються лише для `manual_coords`.
 
-![screen](./assets/screen-3.gif)
+![screen](./screens/screen-3.gif)
 
 ### 8.4. Icons
 
@@ -559,9 +559,9 @@ Tabs:
 - detail icons показують відповідний placeholder token;
 - SVG санітизуються перед збереженням.
 
-![screen](./assets/screen-4.png)
+![screen](./screens/screen-4.png)
 
-![screen](./assets/screen-5.png)
+![screen](./screens/screen-5.png)
 
 ### 8.5. Info
 
@@ -579,7 +579,7 @@ Slug:
 
 - `I18N::info_content()`
 
-![screen](./assets/screen-6.png)
+![screen](./screens/screen-6.png)
 
 ## 9. Структура плагіну
 

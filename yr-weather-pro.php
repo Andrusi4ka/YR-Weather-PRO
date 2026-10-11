@@ -3,7 +3,7 @@
 Plugin Name:       YR Weather Pro
 Plugin URI:        https://github.com/Andrusi4ka/YR-Weather-PRO
 Description:       Weather widgets powered by api.met.no (yr.no). Multiple instances, shortcode, geolocation, admin tabs, custom CSS.
-Version:           9.1.0
+Version:           9.1.1
 Requires at least: 6.0
 Requires PHP:      7.4
 Author:            Relevant AS (Andrii Boiko)
@@ -18,7 +18,7 @@ Update URI:        https://github.com/Andrusi4ka/YR-Weather-PRO
 
 if (!defined('ABSPATH')) exit;
 
-define('YRWP_VERSION', '9.1.0');
+define('YRWP_VERSION', '9.1.1');
 define('YRWP_REPOSITORY', 'https://github.com/Andrusi4ka/YR-Weather-PRO/');
 define('YRWP_FILE', __FILE__);
 define('YRWP_PATH', plugin_dir_path(__FILE__));

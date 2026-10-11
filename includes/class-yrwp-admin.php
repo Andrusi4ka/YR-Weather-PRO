@@ -11,6 +11,20 @@ class Admin {
         add_action('admin_init', [__CLASS__, 'register_settings']);
         add_action('admin_enqueue_scripts', [__CLASS__, 'assets']);
         add_action('wp_ajax_yrwp_city_search', [__CLASS__, 'ajax_city_search']);
+        add_filter('plugin_action_links_' . plugin_basename(YRWP_FILE), [__CLASS__, 'action_links']);
+    }
+
+    /**
+     * "Settings" link next to Deactivate in the Plugins list.
+     */
+    public static function action_links($links) {
+        if (!current_user_can('manage_options')) {
+            return $links;
+        }
+
+        array_unshift($links, '<a href="' . esc_url(admin_url('admin.php?page=yrwp_main')) . '">' . esc_html(I18N::t('settings')) . '</a>');
+
+        return $links;
     }
 
     public static function menu() {

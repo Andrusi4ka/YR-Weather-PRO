@@ -4,7 +4,7 @@ Tags: weather, forecast, yr, met norway, widget
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 9.1.0
+Stable tag: 9.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,9 @@ Its settings, all weather widgets and the cached forecasts.
 From this plugin's GitHub releases. The plugin header's "Update URI" stops WordPress from offering a wordpress.org plugin of the same folder name.
 
 == Changelog ==
+
+= 9.1.1 =
+* "Settings" link next to Deactivate in the Plugins list.
 
 = 9.1.0 =
 * Removed the access key: the plugin works as soon as it is activated (weather, city search, REST). A key saved by an older version is ignored and dropped on the next settings save.
